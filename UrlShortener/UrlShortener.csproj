@@ -39,6 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\IConfigurationProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataAccess\IShortUrlDataStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IShortUrlGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IShortUrlResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
