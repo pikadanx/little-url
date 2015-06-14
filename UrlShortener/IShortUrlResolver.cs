@@ -1,8 +1,9 @@
-﻿
+﻿using System.Threading.Tasks;
+
 namespace UrlShortener
 {
     public interface IShortUrlResolver
     {
-        bool TryGetUrl(string urlKey, out string url);
+        Task<string> GetUrl(string urlKey);
     }
 }
