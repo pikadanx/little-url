@@ -1,12 +1,13 @@
-﻿
+﻿using System.Threading.Tasks;
+
 namespace UrlShortener.DataAccess
 {
     public interface IShortUrlDataStore
     {
-        bool TryAdd(string urlKey, string url);
+        Task<bool> TryAdd(string urlKey, string url);
 
-        bool TryGetUrl(string urlKey, out string url);
+        Task<string> GetUrl(string urlKey);
 
-        long GetNextShortUrlId();
+        Task<long> GetNextShortUrlId();
     }
 }

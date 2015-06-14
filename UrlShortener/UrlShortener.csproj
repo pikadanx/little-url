@@ -49,6 +49,7 @@
     <Compile Include="DataAccess\IShortUrlDataStore.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataAccess\RedisShortUrlDataStore.cs" />
     <Compile Include="IShortUrlGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
