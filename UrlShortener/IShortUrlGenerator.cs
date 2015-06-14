@@ -1,8 +1,9 @@
-﻿
+﻿using System.Threading.Tasks;
+
 namespace UrlShortener
 {
     public interface IShortUrlGenerator
     {
-        string GetNextShortUrlHash();
+        Task<string> GetNextShortUrlHash();
     }
 }
