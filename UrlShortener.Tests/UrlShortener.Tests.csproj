@@ -58,6 +58,7 @@
     <Compile Include="ShortUrlGeneratorTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ShortUrlResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UrlShortener\UrlShortener.csproj">

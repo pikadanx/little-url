@@ -60,6 +60,9 @@
     <Compile Include="ShortUrlGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ShortUrlResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
