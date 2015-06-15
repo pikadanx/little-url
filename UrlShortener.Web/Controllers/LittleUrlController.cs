@@ -18,6 +18,7 @@ namespace UrlShortener.Web.Controllers
             this.shortUrlResolver = shortUrlResolver;
         }
 
+        [Route("{urlKey:regex(^([0-9]|[a-z]|[A-Z]|[-._~])+$)}")]
         public async Task<HttpResponseMessage> Get(string urlKey, bool redirect = true)
         {
             var url = await shortUrlResolver.GetUrl(urlKey);
