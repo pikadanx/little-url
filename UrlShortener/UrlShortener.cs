@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using UrlShortener.Configuration;
 using UrlShortener.DataAccess;
 
 namespace UrlShortener
@@ -8,12 +9,15 @@ namespace UrlShortener
     {
         private readonly IShortUrlDataStore dataStore;
         private readonly IShortUrlGenerator shortUrlGenerator;
+        private readonly IConfigurationProvider configurationProvider;
         private const int MaxTryCount = 3;
 
-        public UrlShortener(IShortUrlDataStore dataStore, IShortUrlGenerator shortUrlGenerator)
+        public UrlShortener(IShortUrlDataStore dataStore, IShortUrlGenerator shortUrlGenerator,
+            IConfigurationProvider configurationProvider)
         {
             this.dataStore = dataStore;
             this.shortUrlGenerator = shortUrlGenerator;
+            this.configurationProvider = configurationProvider;
         }
 
         public async Task<string> CreateShortUrl(string url)
@@ -23,7 +27,7 @@ namespace UrlShortener
                 var shortUrlHash = await shortUrlGenerator.GetNextShortUrlHash();
                 if (await dataStore.TryAdd(shortUrlHash, url))
                 {
-                    return shortUrlHash;
+                    return configurationProvider.ShortUrlBase + shortUrlHash;
                 }
             }
 

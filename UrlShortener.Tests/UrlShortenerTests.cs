@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using UrlShortener.Configuration;
 using UrlShortener.DataAccess;
 
 namespace UrlShortener.Tests
@@ -12,6 +13,7 @@ namespace UrlShortener.Tests
     {
         private Mock<IShortUrlGenerator> mockShortUrlGenerator;
         private Mock<IShortUrlDataStore> mockDataStore;
+        private Mock<IConfigurationProvider> mockConfigurationProvider; 
         private UrlShortener urlShortener;
 
         [TestInitialize]
@@ -19,7 +21,8 @@ namespace UrlShortener.Tests
         {
             mockDataStore = new Mock<IShortUrlDataStore>();
             mockShortUrlGenerator = new Mock<IShortUrlGenerator>();
-            urlShortener = new UrlShortener(mockDataStore.Object, mockShortUrlGenerator.Object);
+            mockConfigurationProvider = new Mock<IConfigurationProvider>();
+            urlShortener = new UrlShortener(mockDataStore.Object, mockShortUrlGenerator.Object, mockConfigurationProvider.Object);
         }
 
         [TestMethod]
@@ -116,6 +119,20 @@ namespace UrlShortener.Tests
             Assert.AreEqual(expectedHash, actualUrl);
             mockShortUrlGenerator.Verify(gen => gen.GetNextShortUrlHash(), Times.Exactly(3));
             mockDataStore.Verify(ds => ds.TryAdd(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(3));
+        }
+
+        [TestMethod]
+        public async Task CreateShortUrl_PrependsShortUrlBaseFromConfigToReturnValue()
+        {
+            mockShortUrlGenerator.Setup(gen => gen.GetNextShortUrlHash())
+                .ReturnsAsync("foo");
+            mockDataStore.Setup(store => store.TryAdd(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(true);
+            mockConfigurationProvider.Setup(config => config.ShortUrlBase).Returns("http://short.url/");
+
+            var actualUrl = await urlShortener.CreateShortUrl("http://example.com");
+
+            Assert.AreEqual("http://short.url/foo", actualUrl);
         }
     }
 }
