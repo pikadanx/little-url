@@ -28,7 +28,8 @@ namespace UrlShortener.Web
             container.RegisterType<IUrlShortener, UrlShortener>(urlShortenerSingletonName,
                 new ExternallyControlledLifetimeManager(),
                 new InjectionConstructor(new ResolvedParameter<IShortUrlDataStore>(shortUrlDataStoreSingletonName),
-                    new ResolvedParameter<IShortUrlGenerator>(shortUrlGeneratorSingletonName)));
+                    new ResolvedParameter<IShortUrlGenerator>(shortUrlGeneratorSingletonName),
+                    new ResolvedParameter<IConfigurationProvider>()));
             container.RegisterType<IShortUrlResolver, ShortUrlResolver>(shortUrlResolverSingletonName,
                 new ExternallyControlledLifetimeManager(),
                 new InjectionConstructor(new ResolvedParameter<IShortUrlDataStore>(shortUrlDataStoreSingletonName)));
