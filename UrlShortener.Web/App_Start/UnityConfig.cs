@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Microsoft.Practices.Unity;
+using UrlShortener.Configuration;
 using UrlShortener.DataAccess;
 using UrlShortener.Web.Controllers;
 
@@ -16,8 +17,11 @@ namespace UrlShortener.Web
             const string urlShortenerSingletonName = "UrlShortener-Singleton";
             const string shortUrlResolverSingletonName = "ShortUrlResolver-Singleton";
 
-            container.RegisterType<IShortUrlDataStore, RedisShortUrlDataStore>(shortUrlDataStoreSingletonName,
+            container.RegisterType<IConfigurationProvider, DefaultConfigurationProvider>(
                 new ExternallyControlledLifetimeManager());
+            container.RegisterType<IShortUrlDataStore, RedisShortUrlDataStore>(shortUrlDataStoreSingletonName,
+                new ExternallyControlledLifetimeManager(),
+                new InjectionConstructor(new ResolvedParameter<IConfigurationProvider>()));
             container.RegisterType<IShortUrlGenerator, ShortUrlGenerator>(shortUrlGeneratorSingletonName,
                 new ExternallyControlledLifetimeManager(),
                 new InjectionConstructor(new ResolvedParameter<IShortUrlDataStore>(shortUrlDataStoreSingletonName)));
