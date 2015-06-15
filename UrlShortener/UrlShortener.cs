@@ -4,7 +4,7 @@ using UrlShortener.DataAccess;
 
 namespace UrlShortener
 {
-    public class UrlShortener
+    public class UrlShortener : IUrlShortener
     {
         private readonly IShortUrlDataStore dataStore;
         private readonly IShortUrlGenerator shortUrlGenerator;
