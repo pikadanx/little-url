@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using StackExchange.Redis;
+using UrlShortener.Configuration;
 
 namespace UrlShortener.DataAccess
 {
@@ -9,10 +10,11 @@ namespace UrlShortener.DataAccess
         private readonly Lazy<ConnectionMultiplexer> redis;
         private readonly string shortUrlIdKey;
 
-        public RedisShortUrlDataStore()
+        public RedisShortUrlDataStore(IConfigurationProvider configurationProvider)
         {
-            redis = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect("localhost")); //TODO use connection string
-            shortUrlIdKey = String.Format("shortUrlId[{0}]", "example.com"); // TODO use short url base from config
+            redis = new Lazy<ConnectionMultiplexer>(
+                () => ConnectionMultiplexer.Connect(configurationProvider.RedisConnectionString));
+            shortUrlIdKey = String.Format("shortUrlId[{0}]", configurationProvider.ShortUrlBase);
         }
 
         public async Task<bool> TryAdd(string urlKey, string url)
