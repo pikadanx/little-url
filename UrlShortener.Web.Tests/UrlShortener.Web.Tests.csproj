@@ -95,6 +95,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\LittleUrlControllerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
@@ -108,6 +111,10 @@
     <ProjectReference Include="..\UrlShortener.Web\UrlShortener.Web.csproj">
       <Project>{4881A507-1D6D-4DA0-973F-445B05F5D2AD}</Project>
       <Name>UrlShortener.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UrlShortener\UrlShortener.csproj">
+      <Project>{e8a3e0fb-26dc-4818-a711-9a97adf1d466}</Project>
+      <Name>UrlShortener</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
