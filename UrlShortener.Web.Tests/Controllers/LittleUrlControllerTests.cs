@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Http.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using UrlShortener.Exceptions;
 using UrlShortener.Web.Controllers;
 using UrlShortener.Web.Models;
 
@@ -62,6 +63,17 @@ namespace UrlShortener.Web.Tests.Controllers
         }
 
         [TestMethod]
+        public async Task Get_Returns503_WhenShortUrlResolverThrowsServiveUnavailable()
+        {
+            mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>()))
+                .ThrowsAsync(new ServiceUnavailableException());
+
+            var response = await littleUrlController.Get("foo");
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.ServiceUnavailable);
+        }
+
+        [TestMethod]
         public async Task Post_Returns400_WhenUrlIsInvalid()
         {
             var context = new CreateLittleUrlRequestContext
@@ -85,6 +97,22 @@ namespace UrlShortener.Web.Tests.Controllers
             var response = await littleUrlController.Post(context);
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
+        }
+
+        [TestMethod]
+        public async Task Post_Returns503_WhenUrlShortenerThrowsServiveUnavailable()
+        {
+            mockUrlShortener.Setup(u => u.CreateShortUrl(It.IsAny<string>()))
+                .ThrowsAsync(new ServiceUnavailableException());
+
+            var context = new CreateLittleUrlRequestContext
+            {
+                Url = "http://example.com"
+            };
+
+            var response = await littleUrlController.Post(context);
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.ServiceUnavailable);
         }
     }
 }
