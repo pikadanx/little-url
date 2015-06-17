@@ -32,6 +32,38 @@ namespace UrlShortener.Web.Tests.Controllers
         }
 
         [TestMethod]
+        public async Task RedirectLittleUrl_Returns404_WhenShortUrlNotFound()
+        {
+            mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>())).ReturnsAsync(String.Empty);
+
+            var response = await littleUrlController.RedirectLittleUrl("foo");
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.NotFound);
+        }
+
+        [TestMethod]
+        public async Task RedirectLittleUrl_Returns301()
+        {
+            mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>())).ReturnsAsync("http://example.com");
+
+            var response = await littleUrlController.RedirectLittleUrl("foo");
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.MovedPermanently);
+            Assert.AreEqual(new Uri("http://example.com"), response.Headers.Location);
+        }
+
+        [TestMethod]
+        public async Task RedirectLittleUrl_Returns503_WhenShortUrlResolverThrowsServiveUnavailable()
+        {
+            mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>()))
+                .ThrowsAsync(new ServiceUnavailableException());
+
+            var response = await littleUrlController.RedirectLittleUrl("foo");
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.ServiceUnavailable);
+        }
+
+        [TestMethod]
         public async Task Get_Returns404_WhenShortUrlNotFound()
         {
             mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>())).ReturnsAsync(String.Empty);
@@ -42,22 +74,11 @@ namespace UrlShortener.Web.Tests.Controllers
         }
 
         [TestMethod]
-        public async Task Get_Returns301_WhenRedirectIsTrue()
+        public async Task Get_Returns200()
         {
             mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>())).ReturnsAsync("http://example.com");
 
             var response = await littleUrlController.Get("foo");
-
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.MovedPermanently);
-            Assert.AreEqual(new Uri("http://example.com"), response.Headers.Location);
-        }
-
-        [TestMethod]
-        public async Task Get_Returns200_WhenRedirectIsFalse()
-        {
-            mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>())).ReturnsAsync("http://example.com");
-
-            var response = await littleUrlController.Get("foo", redirect: false);
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
         }

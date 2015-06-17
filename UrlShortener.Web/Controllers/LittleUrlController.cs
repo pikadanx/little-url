@@ -8,6 +8,7 @@ using UrlShortener.Web.Models;
 
 namespace UrlShortener.Web.Controllers
 {
+    [RoutePrefix("api")]
     public class LittleUrlController : ApiController
     {
         private readonly IUrlShortener urlShortener;
@@ -19,8 +20,9 @@ namespace UrlShortener.Web.Controllers
             this.shortUrlResolver = shortUrlResolver;
         }
 
-        [Route("{urlKey:regex(^([0-9]|[a-z]|[A-Z]|[-._~])+$)}")]
-        public async Task<HttpResponseMessage> Get(string urlKey, bool redirect = true)
+        [HttpGet]
+        [Route("~/{urlKey:regex(^([0-9]|[a-z]|[A-Z]|[-._~])+$)}")]
+        public async Task<HttpResponseMessage> RedirectLittleUrl(string urlKey)
         {
             try
             {
@@ -31,11 +33,26 @@ namespace UrlShortener.Web.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound, new {Error = "Short Url Not Found."});
                 }
 
-                if (redirect)
+                var response = Request.CreateResponse(HttpStatusCode.MovedPermanently);
+                response.Headers.Location = new Uri(url);
+                return response;
+            }
+            catch (ServiceUnavailableException)
+            {
+                return Request.CreateResponse(HttpStatusCode.ServiceUnavailable);
+            }
+        }
+
+        [Route("preview")]
+        public async Task<HttpResponseMessage> Get(string urlKey)
+        {
+            try
+            {
+                var url = await shortUrlResolver.GetUrl(urlKey);
+
+                if (String.IsNullOrEmpty(url))
                 {
-                    var response = Request.CreateResponse(HttpStatusCode.MovedPermanently);
-                    response.Headers.Location = new Uri(url);
-                    return response;
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new {Error = "Short Url Not Found."});
                 }
 
                 return Request.CreateResponse(HttpStatusCode.OK, new {Url = url});
@@ -46,6 +63,7 @@ namespace UrlShortener.Web.Controllers
             }
         }
 
+        [Route("create")]
         public async Task<HttpResponseMessage> Post([FromBody]CreateLittleUrlRequestContext context)
         {
             try
