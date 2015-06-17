@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using StackExchange.Redis;
 using UrlShortener.Configuration;
+using UrlShortener.Exceptions;
 
 namespace UrlShortener.DataAccess
 {
@@ -19,17 +20,39 @@ namespace UrlShortener.DataAccess
 
         public async Task<bool> TryAdd(string urlKey, string url)
         {
-            return await GetDatabase().StringSetAsync(urlKey, url, when: When.NotExists);
+            try
+            {
+                return await GetDatabase().StringSetAsync(urlKey, url, when: When.NotExists);
+            }
+            catch (RedisConnectionException e)
+            {
+                throw new ServiceUnavailableException("Not able to connect to Redis", e);
+            }
+            
         }
 
         public async Task<string> GetUrl(string urlKey)
         {
-            return await GetDatabase().StringGetAsync(urlKey);
+            try
+            {
+                return await GetDatabase().StringGetAsync(urlKey);
+            }
+            catch (RedisConnectionException e)
+            {
+                throw new ServiceUnavailableException("Not able to connect to Redis", e);
+            }
         }
 
         public async Task<long> GetNextShortUrlId()
         {
-            return await GetDatabase().StringIncrementAsync(shortUrlIdKey);
+            try
+            {
+                return await GetDatabase().StringIncrementAsync(shortUrlIdKey);
+            }
+            catch (RedisConnectionException e)
+            {
+                throw new ServiceUnavailableException("Not able to connect to Redis", e);
+            }
         }
 
         private IDatabase GetDatabase()
