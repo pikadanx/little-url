@@ -44,18 +44,24 @@ namespace UrlShortener.Web.Controllers
         }
 
         [Route("preview")]
-        public async Task<HttpResponseMessage> Get(string urlKey)
+        public async Task<HttpResponseMessage> Get(string littleUrl)
         {
             try
             {
+                string urlKey;
+                if (!UrlHelpers.TryGetUrlKeyFromShortUrl(littleUrl, out urlKey))
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest);
+                }
+
                 var url = await shortUrlResolver.GetUrl(urlKey);
 
                 if (String.IsNullOrEmpty(url))
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, new {Error = "Short Url Not Found."});
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Error = "Short Url Not Found." });
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, new {Url = url});
+                return Request.CreateResponse(HttpStatusCode.OK, new { Url = url });
             }
             catch (ServiceUnavailableException)
             {

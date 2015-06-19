@@ -68,7 +68,7 @@ namespace UrlShortener.Web.Tests.Controllers
         {
             mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>())).ReturnsAsync(String.Empty);
 
-            var response = await littleUrlController.Get("foo");
+            var response = await littleUrlController.Get("example.com/foo");
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.NotFound);
         }
@@ -78,7 +78,7 @@ namespace UrlShortener.Web.Tests.Controllers
         {
             mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>())).ReturnsAsync("http://example.com");
 
-            var response = await littleUrlController.Get("foo");
+            var response = await littleUrlController.Get("example.com/foo");
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
         }
@@ -89,7 +89,7 @@ namespace UrlShortener.Web.Tests.Controllers
             mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>()))
                 .ThrowsAsync(new ServiceUnavailableException());
 
-            var response = await littleUrlController.Get("foo");
+            var response = await littleUrlController.Get("example.com/foo");
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.ServiceUnavailable);
         }
