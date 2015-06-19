@@ -74,7 +74,7 @@ namespace UrlShortener.Web.Controllers
         {
             try
             {
-                var url = context.Url; // TODO default scheme to Http if not present
+                var url = UrlHelpers.GetAsCanonialHttpUrl(context.Url);
 
                 if (IsValidUrl(url))
                 {
