@@ -23,6 +23,12 @@ namespace UrlShortener.Web
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angular", "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js").Include(
+                        "~/Scripts/angular.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/littleUrlApp").Include(
+                        "~/Scripts/littleUrlApp/*.js"));
         }
     }
 }
