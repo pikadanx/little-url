@@ -67,6 +67,7 @@
     <Compile Include="ShortUrlResolver.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UrlHelpers.cs" />
     <Compile Include="UrlShortener.cs" />
   </ItemGroup>
   <ItemGroup>

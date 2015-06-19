@@ -59,6 +59,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ShortUrlResolverTests.cs" />
+    <Compile Include="UrlHelpersTests.cs" />
     <Compile Include="UrlShortenerTests.cs" />
   </ItemGroup>
   <ItemGroup>
