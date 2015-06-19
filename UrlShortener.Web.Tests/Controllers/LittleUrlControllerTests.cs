@@ -74,6 +74,14 @@ namespace UrlShortener.Web.Tests.Controllers
         }
 
         [TestMethod]
+        public async Task Get_Returns400_WhenShortUrlIsNull()
+        {
+            var response = await littleUrlController.Get(null);
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.BadRequest);
+        }
+
+        [TestMethod]
         public async Task Get_Returns200()
         {
             mockShortUrlResolver.Setup(r => r.GetUrl(It.IsAny<string>())).ReturnsAsync("http://example.com");
@@ -100,6 +108,19 @@ namespace UrlShortener.Web.Tests.Controllers
             var context = new CreateLittleUrlRequestContext
             {
                 Url = "?bad:Url"
+            };
+
+            var response = await littleUrlController.Post(context);
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.BadRequest);
+        }
+
+        [TestMethod]
+        public async Task Post_Returns400_WhenUrlIsNull()
+        {
+            var context = new CreateLittleUrlRequestContext
+            {
+                Url = null
             };
 
             var response = await littleUrlController.Post(context);

@@ -21,6 +21,11 @@ namespace UrlShortener
 
         public static string GetAsCanonialHttpUrl(string url)
         {
+            if (String.IsNullOrWhiteSpace(url))
+            {
+                return url;
+            }
+
             if (url.StartsWith("//", StringComparison.OrdinalIgnoreCase))
             {
                 url = "http:" + url;

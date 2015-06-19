@@ -104,5 +104,29 @@ namespace UrlShortener.Tests
 
             Assert.AreEqual("http://httpexample.com", result);
         }
+
+        [TestMethod]
+        public void GetAsCanonialHttpUrl_ReturnsUrlAsIs_WhenUrlIsNull()
+        {
+            var result = UrlHelpers.GetAsCanonialHttpUrl(null);
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void GetAsCanonialHttpUrl_ReturnsUrlAsIs_WhenUrlIsEmptyString()
+        {
+            var result = UrlHelpers.GetAsCanonialHttpUrl(String.Empty);
+
+            Assert.AreEqual(String.Empty, result);
+        }
+
+        [TestMethod]
+        public void GetAsCanonialHttpUrl_ReturnsUrlAsIs_WhenUrlIsWhiteSpace()
+        {
+            var result = UrlHelpers.GetAsCanonialHttpUrl("   ");
+
+            Assert.AreEqual("   ", result);
+        }
     }
 }
