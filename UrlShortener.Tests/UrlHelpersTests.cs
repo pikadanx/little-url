@@ -128,5 +128,13 @@ namespace UrlShortener.Tests
 
             Assert.AreEqual("   ", result);
         }
+
+        [TestMethod]
+        public void GetAsCanonialHttpUrl_ReturnsUrlAsIs_WhenUrlSchemeIsFtp()
+        {
+            var result = UrlHelpers.GetAsCanonialHttpUrl("ftp://example.com");
+
+            Assert.AreEqual("ftp://example.com", result);
+        }
     }
 }
