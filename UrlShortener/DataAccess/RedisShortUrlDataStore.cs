@@ -9,13 +9,12 @@ namespace UrlShortener.DataAccess
     public class RedisShortUrlDataStore : IShortUrlDataStore
     {
         private readonly Lazy<ConnectionMultiplexer> redis;
-        private readonly string shortUrlIdKey;
+        private const string ShortUrlIdKey = "[shortUrlId]";
 
         public RedisShortUrlDataStore(IConfigurationProvider configurationProvider)
         {
             redis = new Lazy<ConnectionMultiplexer>(
                 () => ConnectionMultiplexer.Connect(configurationProvider.RedisConnectionString));
-            shortUrlIdKey = String.Format("shortUrlId[{0}]", configurationProvider.ShortUrlBase);
         }
 
         public async Task<bool> TryAdd(string urlKey, string url)
@@ -47,7 +46,7 @@ namespace UrlShortener.DataAccess
         {
             try
             {
-                return await GetDatabase().StringIncrementAsync(shortUrlIdKey);
+                return await GetDatabase().StringIncrementAsync(ShortUrlIdKey);
             }
             catch (RedisConnectionException e)
             {
