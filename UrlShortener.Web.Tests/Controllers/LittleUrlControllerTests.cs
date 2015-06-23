@@ -131,6 +131,9 @@ namespace UrlShortener.Web.Tests.Controllers
         [TestMethod]
         public async Task Post_Returns201()
         {
+            mockUrlShortener.Setup(u => u.CreateShortUrl(It.IsAny<string>()))
+                .ReturnsAsync("http://ex.com/1");
+
             var context = new CreateLittleUrlRequestContext
             {
                 Url = "http://example.com"
@@ -155,6 +158,22 @@ namespace UrlShortener.Web.Tests.Controllers
             var response = await littleUrlController.Post(context);
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.ServiceUnavailable);
+        }
+
+        [TestMethod]
+        public async Task Post_Returns500_WhenCreateShortUrlCannotCreateShortUrl()
+        {
+            mockUrlShortener.Setup(u => u.CreateShortUrl(It.IsAny<string>()))
+                .ReturnsAsync(String.Empty);
+
+            var context = new CreateLittleUrlRequestContext
+            {
+                Url = "http://example.com"
+            };
+
+            var response = await littleUrlController.Post(context);
+
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.InternalServerError);
         }
     }
 }

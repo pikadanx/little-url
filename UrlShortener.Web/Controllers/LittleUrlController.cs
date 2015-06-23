@@ -80,7 +80,10 @@ namespace UrlShortener.Web.Controllers
                 {
                     var shortUrl = await urlShortener.CreateShortUrl(url);
 
-                    return Request.CreateResponse(HttpStatusCode.Created, new {LittleUrl = shortUrl});
+                    return String.IsNullOrEmpty(shortUrl)
+                        ? Request.CreateResponse(HttpStatusCode.InternalServerError,
+                            new {Error = "Could not create little url."})
+                        : Request.CreateResponse(HttpStatusCode.Created, new {LittleUrl = shortUrl});
                 }
 
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new {Error = "Url is not valid."});
