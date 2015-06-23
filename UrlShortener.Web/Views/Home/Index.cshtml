@@ -4,18 +4,24 @@
     <p><a href="https://github.com/pikadanx/little-url" class="btn btn-primary btn-lg">GitHub Repo</a></p>
 </div>
 <div class="row" ng-app="littleUrlApp" ng-controller="LittleUrlController">
-    <div class="col-md-6">
+    <div id="create" class="col-md-6">
         <h2>Create Little Url</h2>
-        <form class="form-inline">
+        <div class="input-group">
             <input class="form-control input-lg" type="text" placeholder="Url" ng-model="bigUrl">
-            <button ng-click="createLittleUrl()" class="btn btn-default btn-lg">Create</button>
-        </form>
+            <span class="input-group-btn">
+                <button ng-click="createLittleUrl()" class="btn btn-default btn-lg">Create</button>
+            </span>
+        </div>
+        <div class="alertArea"></div>
     </div>
-    <div class="col-md-6">
+    <div id="preview" class="col-md-6">
         <h2>Preview Little Url</h2>
-        <form class="form-inline">
+        <div class="input-group">
             <input class="form-control input-lg" type="text" placeholder="Little Url" ng-model="littleUrl">
-            <button ng-click="previewLittleUrl()" class="btn btn-default btn-lg">Preview</button>
-        </form>
+            <span class="input-group-btn">
+                <button ng-click="previewLittleUrl()" class="btn btn-default btn-lg">Preview</button>
+            </span>
+        </div>
+        <div class="alertArea"></div>
     </div>
 </div>
