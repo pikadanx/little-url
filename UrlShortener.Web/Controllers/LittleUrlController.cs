@@ -20,6 +20,11 @@ namespace UrlShortener.Web.Controllers
             this.shortUrlResolver = shortUrlResolver;
         }
 
+        /// <summary>
+        /// Redirects little url to it's associated url.
+        /// </summary>
+        /// <param name="urlKey"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("~/{urlKey:regex(^([0-9]|[a-z]|[A-Z]|[-._~])+$)}")]
         public async Task<HttpResponseMessage> RedirectLittleUrl(string urlKey)
@@ -43,6 +48,11 @@ namespace UrlShortener.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the associated url for the given little url.
+        /// </summary>
+        /// <param name="littleUrl"></param>
+        /// <returns></returns>
         [Route("preview")]
         public async Task<HttpResponseMessage> Get(string littleUrl)
         {
@@ -69,6 +79,11 @@ namespace UrlShortener.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a little url for the given url.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         [Route("create")]
         public async Task<HttpResponseMessage> Post([FromBody]CreateLittleUrlRequestContext context)
         {
