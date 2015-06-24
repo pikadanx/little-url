@@ -24,7 +24,7 @@ namespace UrlShortener.Web
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular", "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/angular", "http://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js").Include(
                         "~/Scripts/angular.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/littleUrlApp").Include(
