@@ -1,7 +1,7 @@
 ﻿littleUrlApp.controller('LittleUrlController', [
     '$scope', 'littleUrlService', function($scope, littleUrlService) {
 
-        $scope.createLittleUrl = function () {
+        $scope.createLittleUrl = function() {
             var alerter = bootstrapAlerter($('#create .alertArea'));
 
             if (!$scope.bigUrl) {
@@ -9,13 +9,16 @@
             }
 
             littleUrlService.createLittleUrl($scope.bigUrl)
-                .success(function (data) {
+                .success(function(data) {
                     alerter.success('Created little url ' + htmlEncode(data.littleUrl) + ' for ' + htmlEncode($scope.bigUrl));
                 })
                 .error(function(data, status) {
                     switch (status) {
                     case 400:
                         alerter.danger('Sorry "' + htmlEncode($scope.bigUrl) + '" is not a valid url.');
+                        break;
+                    case 500:
+                        alerter.danger("Sorry, was not able to create little url. Please try again later.");
                         break;
                     case 503:
                         alerter.danger("Sorry Little Url service is down. :(");
@@ -26,7 +29,7 @@
                 });
         }
 
-        $scope.previewLittleUrl = function () {
+        $scope.previewLittleUrl = function() {
             var alerter = bootstrapAlerter($('#preview .alertArea'));
 
             if (!$scope.littleUrl) {
@@ -75,7 +78,7 @@
                 danger: function(message) {
                     alert('danger', message);
                 },
-                success : function(message) {
+                success: function(message) {
                     alert('success', message);
                 }
             };
